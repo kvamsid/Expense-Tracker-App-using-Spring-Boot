@@ -3,6 +3,8 @@
 ## Overview
 The **Expense Tracker Application** is a comprehensive solution designed to help users efficiently manage their finances by tracking expenses across different categories. This application provides a seamless interface for users to categorize expenses, monitor financial outflows, and maintain better financial planning.
 
+![Swagger API Documentation](Swagger_API_Dccumentation.png)
+
 ## Features
 ### 1. Category Management
 - Create new categories.
