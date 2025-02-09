@@ -3,6 +3,7 @@ package com.example.expense_tracker_app.service.impl;
 import com.example.expense_tracker_app.dto.ExpenseDto;
 import com.example.expense_tracker_app.entity.Category;
 import com.example.expense_tracker_app.entity.Expense;
+import com.example.expense_tracker_app.exceptions.ResourceNotFoundException;
 import com.example.expense_tracker_app.mapper.ExpenseMapper;
 import com.example.expense_tracker_app.repository.CategoryRepository;
 import com.example.expense_tracker_app.repository.ExpenseRepository;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Service
-public class ExpenseImpl implements ExpenseService {
+public class ExpenseServiceImpl implements ExpenseService {
 
     ExpenseRepository expenseRepository;
 
@@ -29,7 +30,7 @@ public class ExpenseImpl implements ExpenseService {
 
     @Override
     public ExpenseDto getExpenseById(Long id) {
-        Expense expense = expenseRepository.findById(id).orElseThrow(()-> new RuntimeException("Expense not found: "+id));
+        Expense expense = expenseRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Expense not found: "+id));
         return ExpenseMapper.maptoExpenseDto(expense);
     }
 
@@ -43,11 +44,11 @@ public class ExpenseImpl implements ExpenseService {
 
     @Override
     public ExpenseDto updateExpense(Long id, ExpenseDto expenseDto) {
-        Expense expense = expenseRepository.findById(id).orElseThrow(()-> new RuntimeException("Expense not found: "+id));
+        Expense expense = expenseRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Expense not found: "+id));
         expense.setAmount(expenseDto.amount());
         expense.setDate(expenseDto.date());
         if(expenseDto.categoryDto() != null){
-            Category category = categoryRepository.findById(expenseDto.categoryDto().id()).orElseThrow(() -> new RuntimeException("Category not found: "+expenseDto.categoryDto().id()));
+            Category category = categoryRepository.findById(expenseDto.categoryDto().id()).orElseThrow(() -> new ResourceNotFoundException("Category not found: "+expenseDto.categoryDto().id()));
             expense.setCategory(category);
         }
         return ExpenseMapper.maptoExpenseDto(expenseRepository.save(expense));
@@ -55,7 +56,7 @@ public class ExpenseImpl implements ExpenseService {
 
     @Override
     public void deleteExpense(Long id) {
-        Expense expense = expenseRepository.findById(id).orElseThrow(()-> new RuntimeException("Expense not found: "+id));
+        Expense expense = expenseRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Expense not found: "+id));
         expenseRepository.delete(expense);
     }
 }
